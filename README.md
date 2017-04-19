@@ -1,8 +1,14 @@
-# vue-tic-tac-toe-game
 
-> Building a Tic-Tac-Toe Game with Vue 2
+# Vue Tic-Tac-Toe Game
+Building a Tic-Tac-Toe Game with Vue 2
 
-## Build Setup
+Author Info
+-----------
+Author: Andrew Gurung <br>
+URL: http://www.andrewgurung.com/
+
+Build Setup
+-----------
 
 ``` bash
 # install dependencies
@@ -15,4 +21,6 @@ npm run dev
 npm run build
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+Skills
+-------
+- Vue
