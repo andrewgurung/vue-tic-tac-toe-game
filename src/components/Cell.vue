@@ -4,7 +4,15 @@
 
 <script>
   export default {
-    data () {}
+    data () {
+      return {
+        // frozen property is used to ensure that the player is not able to change the mark, once it is placed.
+        frozen: false,
+
+        // holds either X or O to be displayed in the td
+        mark: ''
+      }
+    }
   }
 </script>
 
