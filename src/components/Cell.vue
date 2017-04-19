@@ -1,9 +1,9 @@
 <template>
-
+  <td class="cell">{{ mark }}</td>
 </template>
 
 <script>
-  export default() {
+  export default {
     data () {}
   }
 </script>
