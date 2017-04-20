@@ -77,11 +77,11 @@ export default {
 
   watch: {
     // watches for change in the value of gameStatus and changes the status message and color accordingly
-    gameStatus() {
-      if(this.gameStatus === 'win') {
+    gameStatus () {
+      if (this.gameStatus === 'win') {
         this.gameStatusColor = 'statusWin';
         return;
-      } else if(this.gameStatus === 'draw') {
+      } else if (this.gameStatus === 'draw') {
         this.gameStatusColor = 'statusDraw';
         this.gameStatusMessage = 'Draw !';
         return;
@@ -97,27 +97,67 @@ export default {
     },
 
     // checks for possible win conditions from the data
+		checkForWin () {
+			for (let i = 0; i < this.winConditions.length; i++) {
+				// gets a single condition wc from the whole array
+				let wc = this.winConditions[i]
+				let cells = this.cells
+
+        // compares 3 cell values based on the cells in the condition
+				if (this.areEqual(cells[wc[0]], cells[wc[1]], cells[wc[2]])) {
+					return true
+				}
+			}
+
+			return false
+		},
+
+    // checks for possible win conditions from the data
     checkForWin() {
       return false;
     },
 
     gameIsWon () {
+      // fires win event for the App component to change the score
+      Event.$emit('win', this.activePlayer);
+
+      // sets the game status message
+      this.gameStatusMessage = `${this.activePlayer} Wins!`;
+
+      // fires an event to freeze Cell
+      Event.$emit('freeze');
+
+      // set the status to win
       return 'win';
     },
 
     // returns the game status to the gameStatus property
     changeGameStatus() {
-      if(this.checkForWin()) {
-        return this.gameIsWon();
+        if (this.checkForWin()) {
+  				return this.gameIsWon()
+  			// checks if the game is still not won and all cells are filled
+  			} else if (this.moves === 9) {
+  				// sets the status to draw
+  				return 'draw'
+  			}
+  			// sets the status to turn
+  			return 'turn'
+    },
 
-        // checks if the game is still not won and all cells are filled
-      }  else if (this.moves === 9) {
-        //sets the status to draw
-        return 'draw';
-      }
-      // sets the status to turn
-      return 'turn';
-    }
+    // helper function for comparing cell values
+    areEqual () {
+       var len = arguments.length;
+
+       // loops through each value and compares them with an empty sting and for inequality
+       // Start from middle
+       // Compare Middle and First
+       // Compare Middle and Last
+       for (var i = 1; i < len; i++){
+          if (arguments[i] === '' || arguments[i] !== arguments[i-1])
+             return false;
+       }
+       return true;
+     }
 
   },
 
@@ -133,10 +173,14 @@ export default {
 
       // stores the game status
       this.gameStatus = this.changeGameStatus();
-
-      // change player
       this.changePlayer();
-    })
+    });
+
+    // The $data returns the whole data object and $options.data() return the initial state of the data as set in the object.
+    // So, in this code, the initial data is set to the data object, which in other words, resets the data of the component.
+    Event.$on('gridReset', () => {
+        Object.assign(this.$data, this.$options.data())
+    });
 
   }
 }
