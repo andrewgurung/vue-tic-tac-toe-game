@@ -57,6 +57,48 @@ export default {
            [1, 5, 9], [3, 5, 7]             // diagonals
        ],
     }
+  },
+
+  computed: {
+    // helper property to get the non-active player
+    nonActivePlayer() {
+      if(this.activePlayer === 'O') {
+        return 'X';
+      }
+      return 'O';
+    }
+  },
+
+  methods: {
+    // changes the active player to the non-active player with the help of the nonActivePlayer computed property
+    changePlayer() {
+      this.activePlayer = this.nonActivePlayer;
+    },
+
+    // returns the game status to the gameStatus property
+    changeGameStatus() {
+      return 'turn';
+    }
+
+  },
+
+  created() {
+    // listens for a strike made by the user on cell
+    // it is called by the Cell component
+    Event.$on('strike', (cellNumber) => {
+      // sets either X or 0 in the clicked cell array
+      this.cells[cellNumber] = this.activePlayer;
+
+      // increments the number of moves
+      this.moves++;
+
+      // stores the game status
+      this.gameStatus = this.changeGameStatus();
+
+      // change player
+      this.changePlayer();
+    })
+
   }
 }
 </script>
