@@ -1,4 +1,8 @@
 <template>
+<div>
+  <div class="gameStatus" :class="gameStatusColor">
+    {{ gameStatusMessage }}
+  </div>
   <table class="grid">
     <tr>
       <cell name="1"></cell>
@@ -16,6 +20,8 @@
       <cell name="9"></cell>
     </tr>
   </table>
+</div>
+
 </template>
 
 <script>
@@ -69,14 +75,47 @@ export default {
     }
   },
 
+  watch: {
+    // watches for change in the value of gameStatus and changes the status message and color accordingly
+    gameStatus() {
+      if(this.gameStatus === 'win') {
+        this.gameStatusColor = 'statusWin';
+        return;
+      } else if(this.gameStatus === 'draw') {
+        this.gameStatusColor = 'statusDraw';
+        this.gameStatusMessage = 'Draw !';
+        return;
+      }
+      this.gameStatusMessage = `${this.activePlayer}'s turn`
+    }
+  },
+
   methods: {
     // changes the active player to the non-active player with the help of the nonActivePlayer computed property
     changePlayer() {
       this.activePlayer = this.nonActivePlayer;
     },
 
+    // checks for possible win conditions from the data
+    checkForWin() {
+      return false;
+    },
+
+    gameIsWon () {
+      return 'win';
+    },
+
     // returns the game status to the gameStatus property
     changeGameStatus() {
+      if(this.checkForWin()) {
+        return this.gameIsWon();
+
+        // checks if the game is still not won and all cells are filled
+      }  else if (this.moves === 9) {
+        //sets the status to draw
+        return 'draw';
+      }
+      // sets the status to turn
       return 'turn';
     }
 
@@ -86,7 +125,7 @@ export default {
     // listens for a strike made by the user on cell
     // it is called by the Cell component
     Event.$on('strike', (cellNumber) => {
-      // sets either X or 0 in the clicked cell array
+      // Update the state of cells array
       this.cells[cellNumber] = this.activePlayer;
 
       // increments the number of moves
