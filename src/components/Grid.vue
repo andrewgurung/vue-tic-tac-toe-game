@@ -1,27 +1,26 @@
 <template>
-<div>
-  <div class="gameStatus" :class="gameStatusColor">
-    {{ gameStatusMessage }}
+  <div>
+    <div class="gameStatus" :class="gameStatusColor">
+      {{ gameStatusMessage }}
+    </div>
+    <table class="grid">
+      <tr>
+        <cell name="1"></cell>
+        <cell name="2"></cell>
+        <cell name="3"></cell>
+      </tr>
+      <tr>
+        <cell name="4"></cell>
+        <cell name="5"></cell>
+        <cell name="6"></cell>
+      </tr>
+      <tr>
+        <cell name="7"></cell>
+        <cell name="8"></cell>
+        <cell name="9"></cell>
+      </tr>
+    </table>
   </div>
-  <table class="grid">
-    <tr>
-      <cell name="1"></cell>
-      <cell name="2"></cell>
-      <cell name="3"></cell>
-    </tr>
-    <tr>
-      <cell name="4"></cell>
-      <cell name="5"></cell>
-      <cell name="6"></cell>
-    </tr>
-    <tr>
-      <cell name="7"></cell>
-      <cell name="8"></cell>
-      <cell name="9"></cell>
-    </tr>
-  </table>
-</div>
-
 </template>
 
 <script>
@@ -85,8 +84,9 @@ export default {
         this.gameStatusColor = 'statusDraw';
         this.gameStatusMessage = 'Draw !';
         return;
+      } else {
+        this.gameStatusMessage = `${this.activePlayer} Turn !`;
       }
-      this.gameStatusMessage = `${this.activePlayer}'s turn`
     }
   },
 
@@ -112,17 +112,12 @@ export default {
 			return false
 		},
 
-    // checks for possible win conditions from the data
-    checkForWin() {
-      return false;
-    },
-
     gameIsWon () {
       // fires win event for the App component to change the score
       Event.$emit('win', this.activePlayer);
 
       // sets the game status message
-      this.gameStatusMessage = `${this.activePlayer} Wins!`;
+      this.gameStatusMessage = `${this.activePlayer} Wins !`;
 
       // fires an event to freeze Cell
       Event.$emit('freeze');
